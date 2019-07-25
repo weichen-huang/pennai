@@ -1,5 +1,18 @@
 sudo: true
 dist: xenial
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+    - os: linux
+      dist: xenial
+    - os: linux
+      dist: bionic
+    - os: osx
+      osx_image: xcode11
+    - os: windows
+
 services:
   - docker
 
