@@ -30,8 +30,6 @@ jobs:
         - docker run -v $(pwd):/appsrc -w /appsrc pennai_unit_tester nosetests -s -v ai/tests/*.py machine/test/learn_tests.py lab/pyutils/tests/*.py
         # Building docs
         - docker-compose -f ./docker-compose-doc-builder.yml up --abort-on-container-exit --force-recreate
-        # Tell GitHub not to use jekyll to compile the docs
-        - sudo touch target/ai_docs/html/.nojekyll
     -
       name: "Integration Tests on Linux (Ubuntu Xenial 16.04)"
       os: linux
@@ -57,8 +55,6 @@ jobs:
         - docker run -v $(pwd):/appsrc -w /appsrc pennai_unit_tester nosetests -s -v ai/tests/*.py machine/test/learn_tests.py lab/pyutils/tests/*.py
         # Building docs
         - docker-compose -f ./docker-compose-doc-builder.yml up --abort-on-container-exit --force-recreate
-        # Tell GitHub not to use jekyll to compile the docs
-        - sudo touch target/ai_docs/html/.nojekyll
       deploy:
           provider: pages
           skip_cleanup: true
