@@ -5,6 +5,9 @@ platform:
 
 install:
   # Building Docker images
+  - docker pull --platform linux ubuntu:xenial
+  - docker pull --platform linux python:3.7.4-stretch
+  - docker pull --platform linux node:8.15.1-slim
   - docker-compose -f ./docker-compose-int-test.yml build -m 8g
 
 

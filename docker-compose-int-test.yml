@@ -4,7 +4,6 @@ services:
 
   tester:
     build: ./tests/integration
-    platform: linux
     depends_on:
       - lab
       - machine
@@ -23,7 +22,6 @@ services:
     build:
       context: .
       dockerfile: dockers/lab/Dockerfile
-    platform: linux
     tty: true
     stdin_open: true
     volumes:
@@ -46,7 +44,6 @@ services:
     build:
       context: .
       dockerfile: dockers/machine/Dockerfile
-    platform: linux
     tty: true
     stdin_open: true
     volumes:
@@ -66,7 +63,6 @@ services:
     build:
       context: .
       dockerfile: dockers/dbmongo/Dockerfile
-    platform: linux
     tty: true
     stdin_open: true
     ports:
