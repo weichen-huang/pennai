@@ -6,9 +6,9 @@ sudo: false
 jobs:
   include:
     - stage: Test
-      name: "Integration Tests on Linux (Ubuntu Trusty 14.04)"
+      name: "Integration Tests on Linux (Ubuntu Bionic 18.04)"
       os: linux
-      dist: trusty
+      dist: bionic
       install:
         # Building Docker images
         - docker-compose -f ./docker-compose-int-test.yml build -m 8g
@@ -17,9 +17,9 @@ jobs:
         - docker-compose  -f ./docker-compose-int-test.yml run tester bash -c "sh /root/wait_pennai.sh && npm test"
         - docker-compose -f ./docker-compose-int-test.yml down
     - # stage name not required, will continue to use 'Test'
-      name: "Unit Tests on Linux (Ubuntu Trusty 14.04)"
+      name: "Unit Tests on Linux (Ubuntu Bionic 14.04)"
       os: linux
-      dist: trusty
+      dist: bionic
       install:
         # Building Docker images
         - docker-compose -f ./docker-compose-unit-test.yml build -m 8g
@@ -66,55 +66,3 @@ jobs:
           on:
               branch: master
           local_dir: target/ai_docs/html/
-    -
-      name: "Integration Tests on MacOS"
-      os: osx
-      dist: xcode11
-      install:
-        # Building Docker images
-        - docker-compose -f ./docker-compose-int-test.yml build -m 8g
-      script:
-        # Integration tests
-        - docker-compose  -f ./docker-compose-int-test.yml run tester bash -c "sh /root/wait_pennai.sh && npm test"
-        - docker-compose -f ./docker-compose-int-test.yml down
-    - # stage name not required, will continue to use 'Test'
-      name: "Unit Tests on MacOS"
-      os: osx
-      dist: xcode11
-      install:
-        # Building Docker images
-        - docker-compose -f ./docker-compose-unit-test.yml build -m 8g
-      script:
-        # Unit tests
-        - docker run -v $(pwd):/appsrc -w /appsrc pennai_unit_tester mocha machine/test/test.js
-        - docker run -v $(pwd):/appsrc -v /appsrc/lab/webapp/node_modules -w /appsrc/lab/webapp/ pennai_unit_tester npm run test
-        - docker run -v $(pwd):/appsrc -w /appsrc pennai_unit_tester nosetests -s -v ai/tests/*.py machine/test/learn_tests.py lab/pyutils/tests/*.py
-        # Building docs
-        - docker-compose -f ./docker-compose-doc-builder.yml up --abort-on-container-exit --force-recreate
-        # Tell GitHub not to use jekyll to compile the docs
-        - sudo touch target/ai_docs/html/.nojekyll
-    -
-      name: "Integration Tests on Windows"
-      os: windows
-      install:
-        # Building Docker images
-        - docker-compose -f ./docker-compose-int-test.yml build -m 8g
-      script:
-        # Integration tests
-        - docker-compose  -f ./docker-compose-int-test.yml run tester bash -c "sh /root/wait_pennai.sh && npm test"
-        - docker-compose -f ./docker-compose-int-test.yml down
-    - # stage name not required, will continue to use 'Test'
-      name: "Unit Tests on Windows"
-      os: windows
-      install:
-        # Building Docker images
-        - docker-compose -f ./docker-compose-unit-test.yml build -m 8g
-      script:
-        # Unit tests
-        - docker run -v $(pwd):/appsrc -w /appsrc pennai_unit_tester mocha machine/test/test.js
-        - docker run -v $(pwd):/appsrc -v /appsrc/lab/webapp/node_modules -w /appsrc/lab/webapp/ pennai_unit_tester npm run test
-        - docker run -v $(pwd):/appsrc -w /appsrc pennai_unit_tester nosetests -s -v ai/tests/*.py machine/test/learn_tests.py lab/pyutils/tests/*.py
-        # Building docs
-        - docker-compose -f ./docker-compose-doc-builder.yml up --abort-on-container-exit --force-recreate
-        # Tell GitHub not to use jekyll to compile the docs
-        - sudo touch target/ai_docs/html/.nojekyll
