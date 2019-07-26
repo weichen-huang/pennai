@@ -1,7 +1,7 @@
 language: c
 services:
   - docker
-sudo: false
+sudo: true
 
 jobs:
   include:
@@ -62,3 +62,18 @@ jobs:
           on:
               branch: master
           local_dir: target/ai_docs/html/
+    -
+      name: "Integration Tests on Window  (Ubuntu Xenial 16.04)"
+      os: windows
+      pre_install:
+        - @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+        - choco install docker-for-windows
+      install:
+        # Building Docker images
+        #- docker-compose -f ./docker-compose-int-test.yml build -m 8g
+        - docker build ./dockers/lab -t pennai/lab:latest
+      script:
+        - docker ps
+        # Integration tests
+        #- docker-compose  -f ./docker-compose-int-test.yml run tester bash -c "sh /root/wait_pennai.sh && npm test"
+        #- docker-compose -f ./docker-compose-int-test.yml down
